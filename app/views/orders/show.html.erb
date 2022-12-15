@@ -2,6 +2,34 @@
 
   <header class="page-header">
     <h1>Order #<%= @order.id %></h1>
+    <div class="panel panel-default items">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th colspan="2">Product</th>
+          <th>Unit Price</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% raise @line_items.inspect %>
+        <% @line_items.each do |item| %>
+          <%= render 'item', product: Product.where("id = ?", item.product_id), quantity: item[:quantity].to_i %>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="4">
+            TOTAL:
+          </th>
+          <th>
+            <%= humanized_money_with_symbol @line_items.map(&:total_price_cents).inject(0, :+) / 100.0 %>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
   </header>
 
   <div class="order-summary jumbotron">
