@@ -2,6 +2,10 @@ class OrdersController < ApplicationController
 
   def show
     @order = Order.find(params[:id])
+    @line_items = LineItem.where("order_id = ?", params[:id])
+    order_total = @line_items.map(&:total_price_cents).inject(0, :+)
+    
+
   end
 
   def create
